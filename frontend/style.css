@@ -485,3 +485,13 @@ button:disabled { opacity: .6; cursor: not-allowed; }
   font-style: italic;
   animation: pulse 1.4s ease-in-out infinite;
 }
+
+
+/* Start over button (sidebar) */
+.start-over-btn {
+  margin-top: 12px;
+  width: 100%;
+  font-size: 13px;
+  padding: 8px 14px;
+  text-align: center;
+}

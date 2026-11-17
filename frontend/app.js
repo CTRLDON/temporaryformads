@@ -26,6 +26,91 @@ function clearState() {
   state.analyzedCache = null;
 }
 
+/* ── Start over ──────────────────────────────────────────────────── */
+function confirmStartOver() {
+  return new Promise((resolve) => {
+    const bd = document.createElement("div");
+    bd.className = "vo-modal-backdrop";
+    const m = document.createElement("div");
+    m.className = "vo-modal";
+    m.innerHTML = `
+      <button class="vo-close" aria-label="Close">×</button>
+      <h3>Start over?</h3>
+      <p style="line-height:1.6;color:var(--muted);margin:0 0 20px">
+        This returns you to the landing page so you can describe a new idea.
+        Your current venture stays saved on the server — nothing is deleted.
+      </p>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="ghost" id="cancel-start-over">Cancel</button>
+        <button class="primary" id="confirm-start-over">Yes, start over</button>
+      </div>
+    `;
+    bd.appendChild(m);
+    document.body.appendChild(bd);
+
+    const close = (result) => { bd.remove(); resolve(result); };
+    m.querySelector(".vo-close").onclick = () => close(false);
+    m.querySelector("#cancel-start-over").onclick = () => close(false);
+    m.querySelector("#confirm-start-over").onclick = () => close(true);
+    bd.onclick = (e) => { if (e.target === bd) close(false); };
+    const esc = (e) => {
+      if (e.key === "Escape") {
+        close(false);
+        document.removeEventListener("keydown", esc);
+      }
+    };
+    document.addEventListener("keydown", esc);
+  });
+}
+
+async function startOver() {
+  const ok = await confirmStartOver();
+  if (!ok) return;
+
+  // Forget the current venture selection
+  clearState();
+
+  // Tear down any running client-side state
+  if (state.cy) { try { state.cy.destroy(); } catch {} state.cy = null; }
+  stopPoll(); stopETA();
+
+  // Reset UI to landing
+  $("#workspace").classList.add("hidden");
+  $("#discovery").classList.add("hidden");
+  const chat = $("#chat"); if (chat) chat.innerHTML = "";
+  const idea = $("#idea-input"); if (idea) idea.value = "";
+  const ans = $("#answer-input"); if (ans) ans.value = "";
+  $("#landing").classList.remove("hidden");
+  state.readyForBrief = false;
+  state.analyzedCache = null;
+
+  toastOk("Ready for a fresh venture");
+}
+
+function ensureStartOverButton() {
+  const sidebar = document.querySelector(".sidebar");
+  if (!sidebar || document.getElementById("start-over-btn")) return;
+  const btn = document.createElement("button");
+  btn.id = "start-over-btn";
+  btn.className = "ghost start-over-btn";
+  btn.textContent = "Start over";
+  btn.title = "Start a new venture";
+  btn.onclick = startOver;
+  sidebar.appendChild(btn);
+}
+
+function ensureDiscoveryStartOver() {
+  const head = document.querySelector(".discovery-head");
+  if (!head || document.getElementById("discovery-start-over")) return;
+  const btn = document.createElement("button");
+  btn.id = "discovery-start-over";
+  btn.className = "ghost";
+  btn.style.cssText = "margin-left:auto;font-size:13px;padding:6px 12px";
+  btn.textContent = "Start over";
+  btn.onclick = startOver;
+  head.appendChild(btn);
+}
+
 /* ── Arrow-button transform ─────────────────────────────────────────── */
 (function() {
   const ARROW_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
@@ -191,6 +276,7 @@ async function bootstrap() {
         $("#discovery").classList.remove("hidden");
         for (const m of data.messages) addChat(m.role, m.content);
         $("#answer-input").placeholder = "Answer the agent… (or start with ? to ask anything)";
+        ensureDiscoveryStartOver();
         const sum = await api(`/api/ventures/${state.ventureId}/summary`).catch(() => null);
         if (sum && Object.keys(sum.answers || {}).filter((k) => sum.answers[k]).length >= 4
             && !state.readyForBrief) {
@@ -220,6 +306,7 @@ $("#submit-idea").addEventListener("click", async () => {
     $("#discovery").classList.remove("hidden");
     $("#answer-input").placeholder = "Answer the agent… (or start with ? to ask anything)";
     addChat("user", idea);
+    ensureDiscoveryStartOver();
     await askNext(idea);
   } catch (e) { toastError("Create failed: " + e.message); }
 });
@@ -354,6 +441,7 @@ async function enterWorkspace() {
   $("#discovery").classList.add("hidden");
   $("#workspace").classList.remove("hidden");
   ensureAskPanel();
+  ensureStartOverButton();
   await refresh();
   renderThemePicker();
 }

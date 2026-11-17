@@ -14,7 +14,7 @@ def main() -> None:
         print("\n[WARN]  MODEL PROVIDER NOT READY\n" + "-" * 60 + f"\n{e}\n" + "-" * 60)
         print("The API will still start, but agents will error until fixed.\n")
 
-    host = os.getenv("HOST", "127.0.0.1")
+    host = os.getenv("HOST", "0.0.0.0")
     port = int(os.getenv("PORT", "8000"))
     uvicorn.run("backend.app:app", host=host, port=port, reload=False)
 
