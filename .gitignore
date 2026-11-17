@@ -1,0 +1,9 @@
+﻿.env
+_backups/
+
+.env
+*.bak*
+_backup_*/
+_backups/
+*.sh
+__pycache__/

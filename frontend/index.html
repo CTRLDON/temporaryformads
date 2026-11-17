@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VentureOS</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚀%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div id="ollama-banner" class="banner hidden"></div>
+
+  <main id="landing" class="landing">
+    <div class="brand">VentureOS</div>
+    <h1 class="headline">What are we building today?</h1>
+    <p class="subline">An agentic venture builder. Describe your idea — AI agents research, validate, and help you build it.</p>
+    <div class="composer">
+      <textarea id="idea-input" rows="3" placeholder="e.g. A tool that helps freelance designers find clients using AI-matched briefs..."></textarea>
+      <button id="submit-idea" class="primary">Start</button>
+    </div>
+    <div class="examples">
+      <button class="chip">A sustainability-focused reusable packaging service for cafés</button>
+      <button class="chip">An AI study companion for university students</button>
+      <button class="chip">A marketplace for underused community spaces</button>
+    </div>
+  </main>
+
+  <main id="discovery" class="discovery hidden">
+    <header class="discovery-head"><div class="brand">VentureOS</div><div class="sub">Discovery</div></header>
+    <div id="chat" class="chat"></div>
+    <div class="composer composer-inline">
+      <textarea id="answer-input" rows="2" placeholder="Answer the agent..."></textarea>
+      <button id="send-answer" class="primary">Send</button>
+    </div>
+  </main>
+
+  <main id="workspace" class="workspace hidden">
+    <aside class="sidebar">
+      <div class="brand">VentureOS</div>
+      <div id="venture-name" class="venture-name"></div>
+      <nav>
+        <a data-section="overview" class="active">Overview</a>
+        <a data-section="stages">Stages</a>
+        <a data-section="mindmap">Mind Map</a>
+        <a data-section="evidence">Evidence Ledger</a>
+        <a data-section="decisions">Decision Log</a>
+      </nav>
+      <div id="stage-list" class="stage-list"></div>
+      <div class="theme-picker" id="theme-picker">
+        <div class="label">Theme</div>
+        <div class="theme-swatches" id="theme-swatches"></div>
+      </div>
+    </aside>
+    <section class="main-panel">
+      <div class="panel" id="panel-overview">
+        <h2>Overview</h2>
+        <div id="overview-content" class="card"></div>
+        <div id="pending-approvals" class="card"></div>
+      </div>
+      <div class="panel hidden" id="panel-stages">
+        <h2>Stages</h2>
+        <div id="stage-cards"></div>
+      </div>
+      <div class="panel hidden" id="panel-mindmap">
+        <h2>Business Mind Map</h2>
+        <div id="cy"></div>
+      </div>
+      <div class="panel hidden" id="panel-evidence">
+        <h2>Evidence Ledger</h2>
+        <div id="evidence-summary" class="card"></div>
+        <div id="evidence-list"></div>
+      </div>
+      <div class="panel hidden" id="panel-decisions">
+        <h2>Decision Log</h2>
+        <p class="muted" style="margin-top:-12px;margin-bottom:16px">
+          Every decision made by the AI agents, with model, timestamp, and rationale.
+        </p>
+        <div id="decisions-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
