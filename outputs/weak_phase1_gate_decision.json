@@ -1,0 +1,14 @@
+{
+  "stage": "discover",
+  "gate": "STOP",
+  "classification": "NOT FEASIBLE",
+  "rationale": "The venture idea is fundamentally unfeasible because lotteries are mathematically random games of chance, making a 99% accuracy prediction model scientifically impossible. Furthermore, marketing an infallible lottery predictor invites severe legal, regulatory, and ethical violations. The evidence provided discusses general software and sports predictions, which do not validate the core technical claim. Therefore, the project should be immediately terminated.",
+  "sources_used": [
+    "https://www.trueigtech.com/lottery-prediction-software/",
+    "https://leans.ai/",
+    "https://aipredict.io/",
+    "https://dataintelo.com/report/global-lottery-software-market",
+    "https://lottobaba.in/guides/can-ai-predict-lottery-numbers/"
+  ],
+  "assumptions_labelled": "findings without source_url stored as type=assumption"
+}
